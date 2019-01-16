@@ -4,7 +4,7 @@
   "description": "REST API server framework based on koa",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "CREPE_DEBUG=1 node test/test.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/danielwpz/crepecake/issues"
   },
-  "homepage": "https://github.com/danielwpz/crepecake#readme"
+  "homepage": "https://github.com/danielwpz/crepecake#readme",
+  "dependencies": {
+    "koa": "^2.6.2",
+    "koa-router": "^7.4.0"
+  }
 }
