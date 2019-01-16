@@ -1,0 +1,19 @@
+{
+  "name": "crepecake",
+  "version": "0.0.1",
+  "description": "REST API server framework based on koa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/danielwpz/crepecake.git"
+  },
+  "author": "Daniel Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielwpz/crepecake/issues"
+  },
+  "homepage": "https://github.com/danielwpz/crepecake#readme"
+}
