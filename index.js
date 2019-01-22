@@ -1,7 +1,7 @@
 const koa = require('koa');
 const Router = require('./lib/router');
 const HttpResponse = require('./lib/http_response');
-const debug = require('./lib/debug');
+const debug = require('debug')('crepecake');
 
 class CrepeCake extends koa {
 
