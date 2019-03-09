@@ -4,7 +4,7 @@
   "description": "REST API server framework based on koa",
   "main": "index.js",
   "scripts": {
-    "test": "DEBUG=crepecake* node test/test.js"
+    "test": "npx mocha test/test.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,8 @@
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
-    "crepecake-common": "0.0.1"
+    "crepecake-common": "0.0.2",
+    "mocha": "^6.0.2",
+    "supertest": "^3.4.2"
   }
 }
