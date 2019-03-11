@@ -64,7 +64,8 @@ describe('Crepecake Test', () => {
   it('GET /redirect', async () => {
     await request
       .get('/sub/redirect')
-      .expect(302);
+      .expect(302)
+      .expect('Location', '/target');
   });
 
   it('GET /notfound', async () => {
