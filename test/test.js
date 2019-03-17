@@ -38,6 +38,10 @@ describe('Crepecake Test', () => {
       throw HttpResponse.internalError();
     });
 
+    subRouter.get('/:key*', (ctx) => {
+      return ctx.params.key;
+    })
+
     rootRouter.use('/sub', subRouter);
 
     app.use(rootRouter);
@@ -86,4 +90,9 @@ describe('Crepecake Test', () => {
       .expect(500);
   });
 
+  it.only('GET /multi/key/path', async () => {
+    await request
+      .get('/sub/multi/key/path')
+      .expect('multi/key/path');
+  })
 });
