@@ -8,7 +8,7 @@ REST API server framework based on koa.
 ## Getting started
 
 example:
-```
+```javascript
 const CrepeCake = require('../index');
 const HttpResponse = CrepeCake.HttpResponse;
 
