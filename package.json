@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx mocha test/test.js",
-    "prepublish": "npm test"
+    "prepublish": "npm test && git push && git push --tags"
   },
   "types": "index.d.ts",
   "repository": {
