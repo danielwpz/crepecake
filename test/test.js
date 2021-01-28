@@ -78,6 +78,12 @@ describe('Crepecake Test', () => {
       .expect(404);
   });
 
+  it('GET /notfound_foo', async () => {
+    await request
+      .get('/notfound_foo')
+      .expect(404);
+  });
+
   it('GET /toolarge', async () => {
     await request
       .get('/sub/toolarge')
@@ -90,7 +96,7 @@ describe('Crepecake Test', () => {
       .expect(500);
   });
 
-  it.only('GET /multi/key/path', async () => {
+  it('GET /multi/key/path', async () => {
     await request
       .get('/sub/multi/key/path')
       .expect('multi/key/path');
