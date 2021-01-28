@@ -1,13 +1,13 @@
 export class HttpResponse {
-  constructor (readonly code: number, readonly message: string)
+  constructor (code: number, message: string)
 }
 
 export class RedirectResponse extends HttpResponse {
-  constructor (readonly code: number, readonly message: string, readonly url: string)
+  constructor (code: number, message: string, url: string)
 }
 
 export class ServerErrorResponse extends HttpResponse {
-  constructor (readonly code: number, readonly message: string, readonly reason: any)
+  constructor (code: number, message: string, reason: any)
 }
 
 export declare function ok (message: any): HttpResponse

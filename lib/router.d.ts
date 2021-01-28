@@ -1,4 +1,4 @@
-import * as KoaRouter from 'koa-router'
+import KoaRouter from 'koa-router'
 
 export default class Router extends KoaRouter {
   use (path: string, fn: Router | KoaRouter.IMiddleware): Router
