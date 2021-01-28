@@ -19,14 +19,14 @@
   },
   "homepage": "https://github.com/danielwpz/crepecake#readme",
   "dependencies": {
+    "@types/koa": "^2.11.7",
+    "@types/koa-router": "^7.4.1",
     "debug": "^4.1.1",
     "join-path": "^1.1.1",
     "koa": "^2.13.1",
     "koa-router": "^10.0.0"
   },
   "devDependencies": {
-    "@types/koa": "^2.11.7",
-    "@types/koa-router": "^7.4.1",
     "crepecake-common": "0.0.2",
     "mocha": "^8.2.1",
     "newrelic": "^5.10.0",
