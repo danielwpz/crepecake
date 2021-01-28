@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "crepecake-common": "0.0.2",
-    "mocha": "^8.0.1",
+    "mocha": "^8.2.1",
     "newrelic": "^5.10.0",
     "supertest": "^3.4.2"
   }
