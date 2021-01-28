@@ -90,7 +90,7 @@ describe('Crepecake Test', () => {
       .expect(500);
   });
 
-  it.only('GET /multi/key/path', async () => {
+  it('GET /multi/key/path', async () => {
     await request
       .get('/sub/multi/key/path')
       .expect('multi/key/path');
