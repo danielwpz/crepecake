@@ -1,18 +1,18 @@
-const CrepeCake = require('../index');
-const HttpResponse = CrepeCake.HttpResponse;
-const crepecakeCommon = require('crepecake-common');
-const supertest = require('supertest');
+import { Crepecake, HttpResponse, Router } from '../index'
+import supertest from 'supertest'
+import { describe, before, after, it } from 'mocha'
+import CrepecakeCommon from 'crepecake-common'
 
-const app = new CrepeCake();
+const app = new Crepecake();
 
 describe('Crepecake Test', () => {
-  let request, server;
+  let request: supertest.SuperTest<supertest.Test>, server: any;
 
   before(() => {
-    app.use(crepecakeCommon());
+    app.use(CrepecakeCommon());
 
-    const rootRouter = new CrepeCake.Router();
-    const subRouter = new CrepeCake.Router();
+    const rootRouter = new Router();
+    const subRouter = new Router();
 
     subRouter.get('/', (ctx) => {
       return 'ok';
@@ -37,6 +37,10 @@ describe('Crepecake Test', () => {
     subRouter.get('/internalerror', (ctx) => {
       throw HttpResponse.internalError();
     });
+
+    subRouter.get('/path/:v/echo', ctx => {
+      return ctx.params.v
+    })
 
     subRouter.get('/:key*', (ctx) => {
       return ctx.params.key;
@@ -95,6 +99,12 @@ describe('Crepecake Test', () => {
       .get('/sub/internalerror')
       .expect(500);
   });
+
+  it('GET /path/foo/echo', async () => {
+    await request
+      .get('/sub/path/foo/echo')
+      .expect('foo');
+  })
 
   it('GET /multi/key/path', async () => {
     await request

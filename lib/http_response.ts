@@ -1,135 +1,102 @@
-class HttpResponse {
+export class HttpResponse {
   /***
    * Root HTTP Response class, should not be directly used.
    */
-  constructor(code, message) {
-    this.code = code;
-    this.message= message;
-  }
+  constructor (readonly code: number, readonly message: any) {}
 }
 
-class RedirectResponse extends HttpResponse {
-  constructor(code, message, url) {
+export class RedirectResponse extends HttpResponse {
+  constructor (code: number, message: any, readonly url: string) {
     super(code, message);
-    this.url = url;
   }
 }
 
-class ServerErrorResponse extends HttpResponse {
-  constructor(code, message, reason) {
+export class ServerErrorResponse extends HttpResponse {
+  constructor (code: number, message: any, readonly reason: any) {
     super(code, message);
-    this.reason = reason;
   }
 }
 
-function ok(message) {
+export function ok (message?: any) {
   return new HttpResponse(200, message || 'ok');
 }
 
-function created(message) {
+export function created (message?: any) {
   return new HttpResponse(201, message || 'created');
 }
 
-function accepted(message) {
+export function accepted (message?: any) {
   return new HttpResponse(202, message || 'accepted');
 }
 
-function noContent(message) {
+export function noContent (message?: any) {
   return new HttpResponse(204, message || 'no content');
 }
 
-function movedPermanently(url) {
+export function movedPermanently (url: string) {
   return new RedirectResponse(301, 'moved permanently', url);
 }
 
-function found(url) {
+export function found (url: string) {
   return new RedirectResponse(302, 'found', url);
 }
 
-function seeOther(url) {
+export function seeOther (url: string) {
   return new RedirectResponse(303, 'see other', url);
 }
 
-function notModified(message) {
+export function notModified (message?: any) {
   return new HttpResponse(304, message || 'not modified');
 }
 
-
-function temporaryRedirect(url) {
+export function temporaryRedirect (url: string) {
   return new RedirectResponse(307, 'temporary redirect', url);
 }
 
-function badRequest(message) {
+export function badRequest (message?: any) {
   return new HttpResponse(400, message || 'bad request');
 }
 
-function unauthorized(message) {
+export function unauthorized (message?: any) {
   return new HttpResponse(401, message || 'unauthorized');
 }
 
-function forbidden(message) {
+export function forbidden (message?: any) {
   return new HttpResponse(403, message || 'forbidden');
 }
 
-function notFound(message) {
+export function notFound (message?: any) {
   return new HttpResponse(404, message || 'not found');
 }
 
-function notAcceptable(message) {
+export function notAcceptable (message?: any) {
   return new HttpResponse(406, message || 'not acceptable');
 }
 
-function lengthRequired(message) {
+export function lengthRequired (message?: any) {
   return new HttpResponse(411, message || 'length required');
 }
 
-function payloadTooLarge(message) {
+export function payloadTooLarge (message?: any) {
   return new HttpResponse(413, message || 'payload too large');
 }
 
-function unsupportedMediaType(message) {
+export function unsupportedMediaType (message?: any) {
   return new HttpResponse(415, message || 'unsupported media type');
 }
 
-function tooManyRequests(message) {
+export function tooManyRequests (message?: any) {
   return new HttpResponse(429, message || 'too many requests');
 }
 
-function internalError(message, reason) {
+export function internalError(message?: any, reason?: any) {
   return new ServerErrorResponse(500, message || 'internal server error', reason);
 }
 
-function notImplemented(message, reason) {
+export function notImplemented(message?: any, reason?: any) {
   return new ServerErrorResponse(501, message || 'not implemented', reason);
 }
 
-function serviceUnavailable(message, reason) {
+export function serviceUnavailable(message?: any, reason?: any) {
   return new ServerErrorResponse(503, message || 'service unavailable', reason);
 }
-
-module.exports = {
-  HttpResponse,
-  RedirectResponse,
-  ServerErrorResponse,
-  ok,
-  created,
-  accepted,
-  noContent,
-  movedPermanently,
-  found,
-  seeOther,
-  notModified,
-  temporaryRedirect,
-  badRequest,
-  unauthorized,
-  forbidden,
-  notFound,
-  notAcceptable,
-  lengthRequired,
-  payloadTooLarge,
-  unsupportedMediaType,
-  tooManyRequests,
-  internalError,
-  notImplemented,
-  serviceUnavailable
-};
