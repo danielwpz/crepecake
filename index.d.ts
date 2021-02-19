@@ -8,4 +8,4 @@ export default class CrepeCake extends Koa {
 }
 
 export { Router }
-export { HttpResponse } from './lib/http_response'
+export * as HttpResponse from './lib/http_response'
