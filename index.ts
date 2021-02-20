@@ -1,14 +1,18 @@
 import Koa from 'koa';
 import Debug from 'debug';
 import { Router } from './lib/router';
-import { CrepecakeConfig, PartialCrepecakeConfig, Middleware } from './lib/type';
+import { CrepecakeConfig, PartialCrepecakeConfig, Middleware as CrepecakeMiddleware } from './lib/type';
 import { BodyParser } from './lib/middleware/bodyparser';
 import { Compress } from './lib/middleware/compress';
 import { Cors } from './lib/middleware/cors';
 import { Helmet } from './lib/middleware/helmet';
-import Logger from './lib/middleware/logger';
+import { Logger } from './lib/middleware/logger';
 import { defaultConfig } from './lib/config';
+
 export * as HttpResponse from './lib/http_response';
+export * as Middleware from './lib/middleware';
+export * as Type from './lib/type';
+export { Router };
 
 const debug = Debug('crepecake:main');
 
@@ -25,7 +29,7 @@ export class Crepecake {
     this.installGlobalMiddlewares(globalMiddlewares || {});
   }
 
-  use (fn: Router | Middleware) {
+  use (fn: Router | CrepecakeMiddleware) {
     if (fn instanceof Router) {
       debug('installing crepecake router');
       this.app.use(fn.router.routes());
@@ -63,5 +67,3 @@ export class Crepecake {
     }
   }
 }
-
-export { Router };

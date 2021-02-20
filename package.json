@@ -2,13 +2,22 @@
   "name": "crepecake",
   "version": "2.0.4",
   "description": "REST API server framework based on koa",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "package-lock.json",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "tsc",
     "lint": "npx eslint . --fix",
-    "test": "npx ts-mocha test/test.ts",
-    "prepublish": "npm test && git push && git push --tags"
+    "test": "npx ts-mocha test/*.ts test/**/*.ts",
+    "postversion": "git push && git push --tags",
+    "prepublish": "npm test && npm run build"
   },
-  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/danielwpz/crepecake.git"
@@ -40,9 +49,11 @@
     "koa-bodyparser": "^4.3.0",
     "koa-compress": "^5.0.1",
     "koa-helmet": "^6.0.0",
-    "koa-router": "^10.0.0"
+    "koa-router": "^10.0.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.15",
     "@types/debug": "^4.1.5",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-compress": "^4.0.1",
@@ -52,6 +63,7 @@
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
+    "chai": "^4.3.0",
     "eslint": "^7.20.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
@@ -59,7 +71,6 @@
     "eslint-plugin-promise": "^4.3.1",
     "husky": "^5.0.9",
     "mocha": "^8.2.1",
-    "newrelic": "^5.10.0",
     "supertest": "^3.4.2",
     "ts-mocha": "^8.0.0",
     "ts-node": "^9.1.1",

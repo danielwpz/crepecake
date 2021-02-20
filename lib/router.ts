@@ -5,7 +5,7 @@ import assert from 'assert';
 import { ParameterizedContext } from 'koa';
 import { isProduction } from './utils';
 import { HttpResponse, ServerErrorResponse, RedirectResponse } from './http_response';
-import { KoaRouterMethod, KoaMiddleware } from './type';
+import { KoaRouterMethod, Middleware } from './type';
 
 const debug = Debug('crepecake:router');
 
@@ -29,11 +29,11 @@ export class Router {
     return path.join(this.parentRouter.parentPath, this.pathSegment);
   }
 
-  use(path: string, fn: Router | KoaMiddleware): Router
-  use(fn: Router | KoaMiddleware): Router
+  use(path: string, fn: Router | Middleware): Router
+  use(fn: Router | Middleware): Router
   use (
-    path: string | (Router | KoaMiddleware),
-    fn?: Router | KoaMiddleware
+    path: string | (Router | Middleware),
+    fn?: Router | Middleware
   ): Router {
     if (typeof path !== 'string') {
       fn = path;
@@ -57,30 +57,30 @@ export class Router {
     name: string,
     method: KoaRouterMethod,
     path: string | RegExp,
-    ...middleware: KoaMiddleware[]
+    ...middleware: Middleware[]
   ): Router {
     middleware = middleware.map(m => wrap(m, this, path.toString(), name));
     method.call(this.router, path, ...middleware);
     return this;
   }
 
-  get (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
+  get (path: string | RegExp, ...middleware: Middleware[]): Router {
     return this.route('get', this.router.get, path, ...middleware);
   }
 
-  post (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
+  post (path: string | RegExp, ...middleware: Middleware[]): Router {
     return this.route('post', this.router.post, path, ...middleware);
   }
 
-  put (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
+  put (path: string | RegExp, ...middleware: Middleware[]): Router {
     return this.route('put', this.router.put, path, ...middleware);
   }
 
-  patch (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
+  patch (path: string | RegExp, ...middleware: Middleware[]): Router {
     return this.route('patch', this.router.patch, path, ...middleware);
   }
 
-  delete (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
+  delete (path: string | RegExp, ...middleware: Middleware[]): Router {
     return this.route('delete', this.router.delete, path, ...middleware);
   }
 }
@@ -95,7 +95,7 @@ export class Router {
  * the execution of middleware chain will be stopped and the returned value will be
  * sent to the client.
  */
-function wrap (middleware: KoaMiddleware, self: Router, pathName: string, method: string): KoaMiddleware {
+function wrap (middleware: Middleware, self: Router, pathName: string, method: string): Middleware {
   return async function (ctx, next) {
     if (newrelic) {
       let fullPath = path.join(self.parentPath, pathName);
