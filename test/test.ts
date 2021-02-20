@@ -1,7 +1,6 @@
 import { Crepecake, HttpResponse, Router } from '../index';
 import supertest from 'supertest';
 import { describe, before, after, it } from 'mocha';
-import CrepecakeCommon from 'crepecake-common';
 
 const app = new Crepecake();
 
@@ -9,8 +8,6 @@ describe('Crepecake Test', () => {
   let request: supertest.SuperTest<supertest.Test>, server: any;
 
   before(() => {
-    app.use(CrepecakeCommon());
-
     const rootRouter = new Router();
     const subRouter = new Router();
 

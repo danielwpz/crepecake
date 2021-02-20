@@ -5,11 +5,9 @@ import assert from 'assert';
 import { ParameterizedContext } from 'koa';
 import { isProduction } from './utils';
 import { HttpResponse, ServerErrorResponse, RedirectResponse } from './http_response';
+import { KoaRouterMethod, KoaMiddleware } from './type'
 
 const debug = Debug('crepecake:router');
-
-type KoaRouterMethod = (...args: any[]) => KoaRouter
-export type KoaMiddleware = KoaRouter.IMiddleware
 
 let newrelic: any;
 try {
