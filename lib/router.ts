@@ -83,6 +83,11 @@ export class Router {
   delete (path: string | RegExp, ...middleware: Middleware[]): Router {
     return this.route('delete', this.router.delete, path, ...middleware);
   }
+
+  prefix (prefix: string): Router {
+    this.router.prefix(prefix);
+    return this;
+  }
 }
 
 /***
