@@ -89,14 +89,14 @@ export function tooManyRequests (message?: any) {
   return new HttpResponse(429, message || 'too many requests');
 }
 
-export function internalError(message?: any, reason?: any) {
+export function internalError (message?: any, reason?: any) {
   return new ServerErrorResponse(500, message || 'internal server error', reason);
 }
 
-export function notImplemented(message?: any, reason?: any) {
+export function notImplemented (message?: any, reason?: any) {
   return new ServerErrorResponse(501, message || 'not implemented', reason);
 }
 
-export function serviceUnavailable(message?: any, reason?: any) {
+export function serviceUnavailable (message?: any, reason?: any) {
   return new ServerErrorResponse(503, message || 'service unavailable', reason);
 }

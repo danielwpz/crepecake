@@ -4,6 +4,7 @@
   "description": "REST API server framework based on koa",
   "main": "index.js",
   "scripts": {
+    "lint": "npx eslint . --fix",
     "test": "npx ts-mocha test/test.ts",
     "prepublish": "npm test && git push && git push --tags"
   },
@@ -40,7 +41,14 @@
     "@types/debug": "^4.1.5",
     "@types/mocha": "^8.2.1",
     "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
     "crepecake-common": "^1.0.0",
+    "eslint": "^7.20.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
     "mocha": "^8.2.1",
     "newrelic": "^5.10.0",
     "supertest": "^3.4.2",

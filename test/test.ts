@@ -1,7 +1,7 @@
-import { Crepecake, HttpResponse, Router } from '../index'
-import supertest from 'supertest'
-import { describe, before, after, it } from 'mocha'
-import CrepecakeCommon from 'crepecake-common'
+import { Crepecake, HttpResponse, Router } from '../index';
+import supertest from 'supertest';
+import { describe, before, after, it } from 'mocha';
+import CrepecakeCommon from 'crepecake-common';
 
 const app = new Crepecake();
 
@@ -14,37 +14,37 @@ describe('Crepecake Test', () => {
     const rootRouter = new Router();
     const subRouter = new Router();
 
-    subRouter.get('/', (ctx) => {
+    subRouter.get('/', () => {
       return 'ok';
     });
 
-    subRouter.post('/accepted', async (ctx) => {
+    subRouter.post('/accepted', async () => {
       return HttpResponse.accepted();
     });
 
-    subRouter.get('/redirect', async (ctx) => {
+    subRouter.get('/redirect', async () => {
       return HttpResponse.found('/target');
     });
 
-    subRouter.get('/notfound', (ctx) => {
+    subRouter.get('/notfound', () => {
       return HttpResponse.notFound();
     });
 
-    subRouter.get('/toolarge', (ctx) => {
+    subRouter.get('/toolarge', () => {
       throw HttpResponse.payloadTooLarge();
     });
 
-    subRouter.get('/internalerror', (ctx) => {
+    subRouter.get('/internalerror', () => {
       throw HttpResponse.internalError();
     });
 
     subRouter.get('/path/:v/echo', ctx => {
-      return ctx.params.v
-    })
+      return ctx.params.v;
+    });
 
     subRouter.get('/:key*', (ctx) => {
       return ctx.params.key;
-    })
+    });
 
     rootRouter.use('/sub', subRouter);
 
@@ -104,11 +104,11 @@ describe('Crepecake Test', () => {
     await request
       .get('/sub/path/foo/echo')
       .expect('foo');
-  })
+  });
 
   it('GET /multi/key/path', async () => {
     await request
       .get('/sub/multi/key/path')
       .expect('multi/key/path');
-  })
+  });
 });

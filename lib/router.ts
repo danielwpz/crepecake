@@ -1,21 +1,22 @@
-import KoaRouter from 'koa-router'
-import Debug from 'debug'
-import path from 'path'
-import { ParameterizedContext } from 'koa'
-import { isProduction } from './utils'
-import { HttpResponse, ServerErrorResponse, RedirectResponse } from './http_response'
+import KoaRouter from 'koa-router';
+import Debug from 'debug';
+import path from 'path';
+import assert from 'assert';
+import { ParameterizedContext } from 'koa';
+import { isProduction } from './utils';
+import { HttpResponse, ServerErrorResponse, RedirectResponse } from './http_response';
 
-const debug = Debug('crepecake:router')
+const debug = Debug('crepecake:router');
 
 type KoaRouterMethod = (...args: any[]) => KoaRouter
 export type KoaMiddleware = KoaRouter.IMiddleware
 
-let newrelic: any
+let newrelic: any;
 try {
-  newrelic = require('newrelic')
-  debug('found newrelic')
+  newrelic = require('newrelic');
+  debug('found newrelic');
 } catch (e) {
-  debug('not found newrelic')
+  debug('not found newrelic');
 }
 
 export class Router {
@@ -27,13 +28,13 @@ export class Router {
   readonly router = new KoaRouter()
 
   get parentPath () {
-    return path.join(this.parentRouter.parentPath, this.pathSegment)
+    return path.join(this.parentRouter.parentPath, this.pathSegment);
   }
 
   use (path: string, fn: Router | KoaMiddleware): Router
   use (fn: Router | KoaMiddleware): Router
   use (
-    path: string | (Router | KoaMiddleware), 
+    path: string | (Router | KoaMiddleware),
     fn?: Router | KoaMiddleware
   ): Router {
     if (typeof path !== 'string') {
@@ -47,7 +48,8 @@ export class Router {
       this.router.use(path, fn.router.routes());
       this.router.use(path, fn.router.allowedMethods());
     } else {
-      this.router.use(path, fn!);
+      assert(fn); 
+      this.router.use(path, fn);
     }
 
     return this;
@@ -55,8 +57,8 @@ export class Router {
 
   private route (
     name: string,
-    method: KoaRouterMethod, 
-    path: string | RegExp, 
+    method: KoaRouterMethod,
+    path: string | RegExp,
     ...middleware: KoaMiddleware[]
   ): Router {
     middleware = middleware.map(m => wrap(m, this, path.toString(), name));
@@ -65,23 +67,23 @@ export class Router {
   }
 
   get (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
-    return this.route('get', this.router.get, path, ...middleware)
+    return this.route('get', this.router.get, path, ...middleware);
   }
 
   post (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
-    return this.route('post', this.router.post, path, ...middleware)
+    return this.route('post', this.router.post, path, ...middleware);
   }
 
   put (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
-    return this.route('put', this.router.put, path, ...middleware)
+    return this.route('put', this.router.put, path, ...middleware);
   }
 
   patch (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
-    return this.route('patch', this.router.patch, path, ...middleware)
+    return this.route('patch', this.router.patch, path, ...middleware);
   }
 
   delete (path: string | RegExp, ...middleware: KoaRouter.IMiddleware[]): Router {
-    return this.route('delete', this.router.delete, path, ...middleware)
+    return this.route('delete', this.router.delete, path, ...middleware);
   }
 }
 
@@ -90,20 +92,20 @@ export class Router {
  * async function (ctx, next) {
  *   ...
  * }
- * 
+ *
  * If the async function returns, either a HttpResponse object or other nodejs objects,
- * the execution of middleware chain will be stopped and the returned value will be 
+ * the execution of middleware chain will be stopped and the returned value will be
  * sent to the client.
  */
-function wrap(middleware: KoaMiddleware, self: Router, pathName: string, method: string): KoaMiddleware {
+function wrap (middleware: KoaMiddleware, self: Router, pathName: string, method: string): KoaMiddleware {
   return async function (ctx, next) {
     if (newrelic) {
-      let fullPath = path.join(self.parentPath, pathName)
+      let fullPath = path.join(self.parentPath, pathName);
       if (fullPath[0] === '/') {
-        fullPath = fullPath.slice(1)
+        fullPath = fullPath.slice(1);
       }
-      newrelic.setTransactionName(`${fullPath} ${method.toUpperCase()}`)
-      debug(`setup newrelic txn: ${fullPath} ${method.toUpperCase()}`)
+      newrelic.setTransactionName(`${fullPath} ${method.toUpperCase()}`);
+      debug(`setup newrelic txn: ${fullPath} ${method.toUpperCase()}`);
     }
 
     try {
@@ -114,17 +116,18 @@ function wrap(middleware: KoaMiddleware, self: Router, pathName: string, method:
 
       sendResponse(ctx, res);
     } catch (err) {
+      let error: any = err;
+
       if (!(err instanceof ServerErrorResponse || err instanceof Error || err instanceof HttpResponse)) {
-        console.log(err)
-        err = new Error(err);
+        error = new Error(err);
       }
 
-      sendResponse(ctx, err);
+      sendResponse(ctx, error);
     }
-  }
+  };
 }
 
-function sendResponse(ctx: ParameterizedContext, res: any) {
+function sendResponse (ctx: ParameterizedContext, res: any) {
   if (res instanceof ServerErrorResponse) {
     ctx.status = res.code;
     const response: any = {
