@@ -31,8 +31,8 @@ export class Router {
     return path.join(this.parentRouter.parentPath, this.pathSegment);
   }
 
-  use (path: string, fn: Router | KoaMiddleware): Router
-  use (fn: Router | KoaMiddleware): Router
+  use(path: string, fn: Router | KoaMiddleware): Router
+  use(fn: Router | KoaMiddleware): Router
   use (
     path: string | (Router | KoaMiddleware),
     fn?: Router | KoaMiddleware
@@ -48,7 +48,7 @@ export class Router {
       this.router.use(path, fn.router.routes());
       this.router.use(path, fn.router.allowedMethods());
     } else {
-      assert(fn); 
+      assert(fn);
       this.router.use(path, fn);
     }
 
