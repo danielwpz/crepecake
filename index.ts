@@ -17,8 +17,8 @@ export class Crepecake {
 
   constructor (config?: PartialCrepecakeConfig) {
     config = {
-      ...config,
-      ...defaultConfig
+      ...defaultConfig,
+      ...config
     };
 
     const globalMiddlewares = config?.middleware?.global;
