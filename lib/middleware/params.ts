@@ -4,8 +4,21 @@ import assert from 'assert';
 import { Next } from 'koa';
 import { badRequest } from '../http_response';
 
+export interface ValidateOption {
+  strict?: boolean;
+  abortEarly?: boolean;
+  recursive?: boolean;
+  context?: any;
+}
+
+// we enforce strip unknown here, so that ctx.params only produces known fields.
+// in case you need extra fields from request, use raw query or body.
+const defaultOptions = {
+  stripUnknown: true
+};
+
 // decorator
-export function params (schema: yup.BaseSchema) {
+export function params (schema: yup.BaseSchema, validateOptions?: ValidateOption) {
   return function (
     target: any,
     propertyKey: string,
@@ -13,16 +26,24 @@ export function params (schema: yup.BaseSchema) {
   ) {
     assert(descriptor.value, 'params must be used as a method decorator');
     const oldHandler = descriptor.value;
-    descriptor.value = buildHandler(schema, oldHandler);
+    const options = {
+      ...defaultOptions,
+      ...validateOptions
+    };
+    descriptor.value = buildHandler(schema, options, oldHandler);
   };
 }
 
 // middleware
-export function Params (schema: yup.BaseSchema): Type.Middleware {
-  return buildHandler(schema);
+export function Params (schema: yup.BaseSchema, validateOptions?: ValidateOption): Type.Middleware {
+  const options = {
+    ...defaultOptions,
+    ...validateOptions
+  };
+  return buildHandler(schema, options);
 }
 
-function buildHandler (schema: yup.BaseSchema, oldHandler?: Type.Middleware): Type.Middleware {
+function buildHandler (schema: yup.BaseSchema, validateOptions: ValidateOption, oldHandler?: Type.Middleware): Type.Middleware {
   return async (ctx: Type.CrepecakeContext, next: Next) => {
     try {
       const data = {
@@ -30,7 +51,7 @@ function buildHandler (schema: yup.BaseSchema, oldHandler?: Type.Middleware): Ty
         ...(ctx.request as any).body
       };
 
-      const params = await schema.validate(data);
+      const params = await schema.validate(data, validateOptions);
       const oldParams = ctx.params;
       ctx.params = {
         ...oldParams,

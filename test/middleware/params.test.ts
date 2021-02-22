@@ -36,7 +36,7 @@ class FooController {
   }
 }
 
-describe('Middleware Test', () => {
+describe('Params Middleware Test', () => {
   let request: supertest.SuperTest<supertest.Test>, server: any;
 
   before(() => {
@@ -49,7 +49,6 @@ describe('Middleware Test', () => {
         ...ctx.params
       };
     });
-
     router.post('/params/:id', fooController.postFoo);
 
     app.use(router);
@@ -80,13 +79,13 @@ describe('Middleware Test', () => {
       expect(res.body.limit).eql(10);
     });
 
-    it('extra params should be allowed', async () => {
+    it('extra params should be ignored by default', async () => {
       const res = await request
         .get('/params')
         .query({ query: 'bar', more: 'yes' })
         .expect(200);
 
-      expect(res.body.more).eql('yes');
+      expect(res.body.more).not.exist;
     });
   });
 
