@@ -22,8 +22,8 @@ export type CrepecakeContext<StateT = DefaultState, CustomT = DefaultContext> =
   ParameterizedContext<StateT, CustomT & KoaRouter.IRouterParamContext<StateT, CustomT>>;
 
 // a special type of context with params defined by a Yup schema
-export type ParamsContext<P extends BaseSchema = AnySchema> = CrepecakeContext & {
-  params: InferType<P> & { [key: string]: any }
+export interface ParamsContext<P extends BaseSchema = AnySchema> extends CrepecakeContext {
+  params: { [name: string]: any } & InferType<P>
 }
 
 export interface CrepecakeConfig {
