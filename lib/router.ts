@@ -3,7 +3,7 @@ import Debug from 'debug';
 import path from 'path';
 import assert from 'assert';
 import { ParameterizedContext } from 'koa';
-import { isProduction } from './utils';
+import { isProduction, isDevelopment } from './utils';
 import { HttpResponse, ServerErrorResponse, RedirectResponse } from './http_response';
 import { KoaRouterMethod, Middleware } from './type';
 
@@ -148,7 +148,11 @@ function sendResponse (ctx: ParameterizedContext, res: any) {
     ctx.status = res.code;
     ctx.body = res.message;
   } else if (res instanceof Error) {
-    throw res;
+    if (!isDevelopment()) {
+      throw res;
+    }
+    ctx.status = 500;
+    ctx.body = res.stack;
   } else {
     ctx.body = res;
   }
