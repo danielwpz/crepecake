@@ -1,6 +1,6 @@
 {
   "name": "crepecake",
-  "version": "3.0.1-0",
+  "version": "3.0.1-1",
   "description": "REST API server framework based on koa",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
