@@ -64,7 +64,7 @@ function buildHandler (schema: yup.BaseSchema, validateOptions: ValidateOption, 
         await next(); // middleware mode
       }
     } catch (err) {
-      if (err instanceof yup.ValidationError) {
+      if (err.name === 'ValidationError') {
         throw badRequest({ error: err.message });
       }
 
