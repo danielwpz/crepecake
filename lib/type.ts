@@ -1,4 +1,4 @@
-import { DefaultContext, DefaultState, ParameterizedContext } from 'koa';
+import { DefaultContext, DefaultState, ParameterizedContext, Next as KoaNext } from 'koa';
 import KoaRouter from 'koa-router';
 import { BaseSchema, AnySchema, InferType } from 'yup';
 
@@ -16,6 +16,8 @@ type DeepPartial<T> = {
 
 // type for all kinds of middlewares or handlers
 export type Middleware = KoaRouter.IMiddleware;
+
+export type Next = KoaNext
 
 // type for general context passed to a middleware
 export type CrepecakeContext<StateT = DefaultState, CustomT = DefaultContext> = 
