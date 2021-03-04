@@ -1,46 +1,47 @@
-const CrepeCake = require('../index');
-const HttpResponse = CrepeCake.HttpResponse;
-const crepecakeCommon = require('crepecake-common');
-const supertest = require('supertest');
+import { Crepecake, HttpResponse, Router } from '../index';
+import supertest from 'supertest';
+import { describe, before, after, it } from 'mocha';
 
-const app = new CrepeCake();
+const app = new Crepecake();
 
 describe('Crepecake Test', () => {
-  let request, server;
+  let request: supertest.SuperTest<supertest.Test>, server: any;
 
   before(() => {
-    app.use(crepecakeCommon());
+    const rootRouter = new Router();
+    const subRouter = new Router();
 
-    const rootRouter = new CrepeCake.Router();
-    const subRouter = new CrepeCake.Router();
-
-    subRouter.get('/', (ctx) => {
+    subRouter.get('/', () => {
       return 'ok';
     });
 
-    subRouter.post('/accepted', async (ctx) => {
+    subRouter.post('/accepted', async () => {
       return HttpResponse.accepted();
     });
 
-    subRouter.get('/redirect', async (ctx) => {
+    subRouter.get('/redirect', async () => {
       return HttpResponse.found('/target');
     });
 
-    subRouter.get('/notfound', (ctx) => {
+    subRouter.get('/notfound', () => {
       return HttpResponse.notFound();
     });
 
-    subRouter.get('/toolarge', (ctx) => {
+    subRouter.get('/toolarge', () => {
       throw HttpResponse.payloadTooLarge();
     });
 
-    subRouter.get('/internalerror', (ctx) => {
+    subRouter.get('/internalerror', () => {
       throw HttpResponse.internalError();
+    });
+
+    subRouter.get('/path/:v/echo', ctx => {
+      return ctx.params.v;
     });
 
     subRouter.get('/:key*', (ctx) => {
       return ctx.params.key;
-    })
+    });
 
     rootRouter.use('/sub', subRouter);
 
@@ -96,9 +97,15 @@ describe('Crepecake Test', () => {
       .expect(500);
   });
 
+  it('GET /path/foo/echo', async () => {
+    await request
+      .get('/sub/path/foo/echo')
+      .expect('foo');
+  });
+
   it('GET /multi/key/path', async () => {
     await request
       .get('/sub/multi/key/path')
       .expect('multi/key/path');
-  })
+  });
 });
